@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 const port = process.env.PORT || 5000
-
+const cors = require('cors');
 
 const users = [
     {
@@ -21,14 +21,21 @@ const users = [
     }
 ];
 
-
+app.use(cors())
+app.use(express.json())
 app.get('/', (req, res) => {
     res.send('users management running')
 })
 
-app.get('/users', (req , res) => {
+app.get('/users', (req, res) => {
     res.send(users)
 })
 
+app.post('/users', (req, res) => {
+    const newUser = req.body
+    newUser.id = users.length + 1
+    users.push(newUser)
+    res.send(newUser)
+})
 
 app.listen(port)
